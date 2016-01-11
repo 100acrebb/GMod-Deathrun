@@ -5,6 +5,12 @@ GM.Author 	= "Mr. Gash"
 GM.Email 	= ""
 GM.Website 	= "nonerdsjustgeeks.com"
 
+
+
+function GM:VecDistance(Vec1, Vec2)
+	return math.sqrt((Vec1.x-Vec2.x)^2+(Vec1.y-Vec2.y)^2+(Vec1.z-Vec2.z)^2)
+end
+
 function GM:CreateTeams()
 	TEAM_DEATH = 2
 	team.SetUp( TEAM_DEATH, "Death", Color( 180, 60, 60, 255 ), false )

@@ -6,14 +6,15 @@ ROUND_ENDING = 3
 SetGlobalInt( "Deathrun_RoundPhase", ROUND_WAITING )
 SetGlobalInt( "Deathrun_RoundTime", 0 )
 
-local minplayers = CreateConVar( "dr_min_players", 2, FCVAR_ARCHIVE )
-
 function GM:SetRoundTime( time )
 	return SetGlobalInt( "Deathrun_RoundTime", CurTime() + (tonumber(time or 5) or 5) )
 end
 
 CreateConVar( "dr_death_rate", 0.25, FCVAR_ARCHIVE )
 CreateConVar( "dr_death_max", 6, FCVAR_ARCHIVE )
+
+
+
 
 function GM:DoWeNeedDeath()
 
@@ -109,6 +110,7 @@ GM.RoundFunctions = {
 		end
 
 		gm:NotifyAll( "The round has started!" )
+		hook.Call("OnRoundStart")
 
 	end,
 
@@ -166,7 +168,7 @@ GM.ThinkRoundFunctions = {
 
 	[ROUND_WAITING] = function( gm )
 
-		if #player.GetAll() < minplayers:GetInt() then return end
+		if #player.GetAll() < 2 then return end
 
 		gm:SetRound( ROUND_PREPARING )
 
@@ -187,16 +189,17 @@ GM.ThinkRoundFunctions = {
 		if time <= 0 then
 			gm:SetRound( ROUND_ENDING, 123 )
 			return
-		elseif not HasDoneCheck and time <= GetConVarNumber( "dr_roundtime_seconds" )*0.5 then
-			HasDoneCheck = true
-			for k, v in pairs( player.GetAll() ) do
-				if v:Alive() and not v._HasPressedKey then
-					v._HasPressedKey = true
-					v:Kill()
-					PrintMessage( HUD_PRINTTALK, "Automatically killed "..v:Nick().." for being AFK." )
-				end
-			end
 		end
+		--elseif not HasDoneCheck and time <= GetConVarNumber( "dr_roundtime_seconds" )*0.5 then
+		--	HasDoneCheck = true
+		--	for k, v in pairs( player.GetAll() ) do
+		--		if v:Alive() and not v._HasPressedKey then
+		--			v._HasPressedKey = true
+		--			v:Kill()
+		--			PrintMessage( HUD_PRINTTALK, "Automatically killed "..v:Nick().." for being AFK." )
+		--		end
+		--	end
+		--end
 
 		local numa = #GetAlivePlayersFromTeam( TEAM_RUNNER )
 		local numb = #GetAlivePlayersFromTeam( TEAM_DEATH )

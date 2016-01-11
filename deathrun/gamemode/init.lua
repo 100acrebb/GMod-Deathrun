@@ -4,15 +4,20 @@ AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_scoreboard.lua" )
 AddCSLuaFile( "cl_voice.lua" )
 AddCSLuaFile( "cl_init.lua" )
+-- AddCSLuaFile( "cl_claim.lua")
 AddCSLuaFile( "cl_frames.lua" )
 AddCSLuaFile( "menutext.lua" )
 
 AddCSLuaFile( "rtv/config.lua" )
 AddCSLuaFile( "rtv/cl_rtv.lua" )
 
+AddCSLuaFile("vgui/fonts.lua")
+AddCSLuaFile("vgui/polygenerator.lua")
+
 include( "shared.lua" )
 include( "sv_round.lua" )
 include( "sv_weps.lua" )
+-- include( "sv_claim.lua")
 
 include( "rtv/config.lua" )
 include( "rtv/sv_rtv.lua" )
@@ -384,16 +389,16 @@ function GM:DoPlayerDeath( ply, attacker, cinfo )
 		end
 	end
 
-	if num == 1 and IsValid(last) and self:GetRoundTime() < ( GetConVarNumber("dr_roundtime_seconds") - 20 ) then
-		local t = last:Team()
-		timer.Simple( 1, function()
-			if not IsValid(last) then return end
-			if not last:Alive() then return end
-			if last:Team() != t then return end
-			last:Kill()
-			PrintMessage( 3, last:Nick().." has been killed for being AFK as the last member of the "..team.GetName(t).." team." )
-		end )
-	end
+	--if num == 1 and IsValid(last) and self:GetRoundTime() < ( GetConVarNumber("dr_roundtime_seconds") - 20 ) then
+	--	local t = last:Team()
+	--	timer.Simple( 1, function()
+	--		if not IsValid(last) then return end
+	--		if not last:Alive() then return end
+	--		if last:Team() != t then return end
+	--		last:Kill()
+	--		PrintMessage( 3, last:Nick().." has been killed for being AFK as the last member of the "..team.GetName(t).." team." )
+	--	end )
+	--end
 
 	ply._unspec_deathrag = CurTime() + 2
 
@@ -610,6 +615,7 @@ function GM:Think()
 	self.BaseClass:Think()
 	self:RoundThink()
 	self:ConVarThink()
+	--self:ButtonThink()
 end
 
 function GM:PlayerSay( ply, text )
@@ -655,3 +661,10 @@ end
 function GM:AllowPlayerPickup( ply, ent )
 	return false
 end
+
+
+
+function GM:PostCleanupMap()
+   --self:LoadButtons()
+end
+

@@ -11,13 +11,17 @@ include( "cl_scoreboard.lua" )
 include( "cl_frames.lua" )
 include( "menutext.lua" )
 include( "cl_voice.lua" )
+-- include("cl_claim.lua")
 
 include( "rtv/config.lua" )
 include( "rtv/cl_rtv.lua" )
 
+include("vgui/fonts.lua")
+include("vgui/polygenerator.lua")
+
 if SERVER then return end
 
-local name = "Dragon Dildo"
+local name = "Buzzminion"
 
 language.Add( "trigger_hurt", name )
 language.Add( "env_explosion", name )
@@ -43,6 +47,9 @@ local hx, hw, hh, border = 5, 204, 30, 2
 
 local keys = {}
 local draw_keys = false
+
+
+
 
 function GM:HUDPaint( )
 
@@ -121,6 +128,8 @@ function GM:HUDPaint( )
 		end
 	end
 
+	hook.Run( "HUDDrawButtons" )
+	
 	self.BaseClass:HUDPaint()
 
 end
